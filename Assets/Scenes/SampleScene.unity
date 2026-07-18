@@ -539,6 +539,10 @@ PrefabInstance:
       propertyPath: color
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: m_Name
       value: Ball (7)
@@ -1101,6 +1105,10 @@ PrefabInstance:
       propertyPath: color
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: m_Name
       value: Ball (1)
@@ -1279,6 +1287,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: color
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
@@ -1599,6 +1611,10 @@ PrefabInstance:
       propertyPath: color
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: m_Name
       value: Ball (3)
@@ -1664,6 +1680,10 @@ PrefabInstance:
       propertyPath: color
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: m_Name
       value: Ball (2)
@@ -1727,6 +1747,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: color
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
@@ -1904,6 +1928,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
       propertyPath: color
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1663275058282843399, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
+      propertyPath: point
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6625189252601471347, guid: 50d635c7561124547b7ae73acfd16a6d, type: 3}
