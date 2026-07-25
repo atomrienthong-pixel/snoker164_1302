@@ -21,6 +21,12 @@ public class Ball : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private BallColor color;
 
+    private MeshRenderer rd;
+
+    void Awake()
+    {
+        rd = GetComponent<MeshRenderer>();
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -29,45 +35,49 @@ public class Ball : MonoBehaviour, IPointerClickHandler
         Destroy(gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Update()
     {
-        ApplyColor();
+
     }
 
-    // ทำงานทุกครั้งที่แก้ค่าใน Inspector ทำให้เห็นสีทันทีโดยไม่ต้องกด Play
-    void OnValidate()
+    public void SetColorAndPoint(BallColor col)
     {
-        ApplyColor();
-    }
+        color = col;
 
-    void ApplyColor()
-    {
-        Renderer rend = GetComponent<Renderer>();
-        if (rend == null) return;
-
-        // ใช้ MaterialPropertyBlock เพื่อเปลี่ยนสีรายลูกโดยไม่สร้าง material ใหม่
-        MaterialPropertyBlock block = new MaterialPropertyBlock();
-        rend.GetPropertyBlock(block);
-        block.SetColor("_BaseColor", GetColor(color));
-        rend.SetPropertyBlock(block);
-    }
-
-    Color GetColor(BallColor ballColor)
-    {
-        switch (ballColor)
+        switch (col)
         {
-            case BallColor.White: return new Color(1f, 1f, 1f);
-            case BallColor.Red: return new Color(0.85f, 0.05f, 0.05f);
-            case BallColor.Yellow: return new Color(1f, 0.8f, 0.05f);
-            case BallColor.Green: return new Color(0.05f, 0.4f, 0.1f);
-            case BallColor.Brown: return new Color(0.42f, 0.24f, 0.1f);
-            case BallColor.Blue: return new Color(0.1f, 0.25f, 0.85f);
-            case BallColor.Pink: return new Color(1f, 0.5f, 0.65f);
-            case BallColor.Black: return new Color(0.03f, 0.03f, 0.03f);
-            default: return Color.white;
+            case BallColor.White:
+                point = 0;
+                rd.material.color = Color.white;
+                break;
+            case BallColor.Red:
+                point = 1;
+                rd.material.color = Color.red;
+                break;
+            case BallColor.Yellow:
+                point = 2;
+                rd.material.color = Color.yellow;
+                break;
+            case BallColor.Green:
+                point = 3;
+                rd.material.color = Color.green;
+                break;
+            case BallColor.Brown:
+                point = 4;
+                rd.material.color = new Color(0.55f, 0.27f, 0.07f);
+                break;
+            case BallColor.Blue:
+                point = 5;
+                rd.material.color = Color.blue;
+                break;
+            case BallColor.Pink:
+                point = 6;
+                rd.material.color = new Color(1f, 0.75f, 0.8f);
+                break;
+            case BallColor.Black:
+                point = 7;
+                rd.material.color = Color.black;
+                break;
         }
     }
-
-
 }
