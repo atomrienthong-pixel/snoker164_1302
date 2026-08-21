@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public enum BallColor
 {
@@ -13,7 +12,7 @@ public enum BallColor
     Black
 }
 
-public class Ball : MonoBehaviour, IPointerClickHandler
+public class Ball : MonoBehaviour
 {
     [SerializeField]
     private int point;
@@ -21,23 +20,23 @@ public class Ball : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private BallColor color;
 
+    [SerializeField]
+    private float stopSpeed = 0.15f;
+
     private MeshRenderer rd;
+    private Rigidbody rb;
+    private Vector3 spot;
+
+    public int Point { get { return point; } }
+    public BallColor ColorType { get { return color; } }
+    public bool IsMoving { get { return rb.linearVelocity.magnitude > stopSpeed; } }
 
     void Awake()
     {
         rd = GetComponent<MeshRenderer>();
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log(point);
-        GameManger.instance.PlayerScore += point;
-        Destroy(gameObject);
-    }
-
-    void Update()
-    {
-
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     public void SetColorAndPoint(BallColor col)
@@ -79,5 +78,41 @@ public class Ball : MonoBehaviour, IPointerClickHandler
                 rd.material.color = Color.black;
                 break;
         }
+    }
+
+    public void SetSpot(Vector3 pos)
+    {
+        spot = pos;
+        transform.position = pos;
+    }
+
+    public void Stop()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    public void BackToSpot()
+    {
+        Stop();
+        transform.position = spot;
+        gameObject.SetActive(true);
+    }
+
+    public void Shoot(Vector3 dir, float power)
+    {
+        Stop();
+        rb.AddForce(dir * power, ForceMode.VelocityChange);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (color != BallColor.White)
+            return;
+
+        Ball other = collision.gameObject.GetComponent<Ball>();
+
+        if (other != null && GameManger.instance != null)
+            GameManger.instance.ReportFirstHit(other);
     }
 }
