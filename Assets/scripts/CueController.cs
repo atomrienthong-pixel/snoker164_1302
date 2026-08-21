@@ -65,6 +65,7 @@ public class CueController : MonoBehaviour
     private float power;
     private bool charging;
     private bool topView = true;
+    private bool wasShooting;
 
     private Vector3 AimDir { get { return Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward; } }
 
@@ -85,6 +86,12 @@ public class CueController : MonoBehaviour
 
         if (GameManger.instance.CanShoot)
         {
+            if (wasShooting)
+            {
+                wasShooting = false;
+                topView = true;
+            }
+
             Aim();
             Charge();
             ShowCue(ballPos);
@@ -92,6 +99,7 @@ public class CueController : MonoBehaviour
         }
         else
         {
+            wasShooting = true;
             HideCue();
         }
 
@@ -127,6 +135,9 @@ public class CueController : MonoBehaviour
 
         if (Mouse.current.leftButton.isPressed)
         {
+            if (!charging)
+                topView = false;
+
             charging = true;
             chargeTime += Time.deltaTime;
             power = Mathf.PingPong(chargeTime * chargeSpeed, maxPower);
