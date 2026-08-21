@@ -30,6 +30,12 @@ public class GameManger : MonoBehaviour
     private int foulPoint = 4;
 
     [SerializeField]
+    private float minShotTime = 0.4f;
+
+    [SerializeField]
+    private float maxShotTime = 25f;
+
+    [SerializeField]
     private int[] playerScore = new int[2];
 
     private List<Ball> balls = new List<Ball>();
@@ -41,6 +47,7 @@ public class GameManger : MonoBehaviour
     private bool needRed = true;
     private bool shotRunning;
     private bool gameOver;
+    private float shotTimer;
 
     public int PlayerScore { get { return playerScore[turn]; } set { playerScore[turn] = value; } }
     public int Turn { get { return turn; } }
@@ -64,7 +71,12 @@ public class GameManger : MonoBehaviour
         if (!shotRunning)
             return;
 
-        if (BallsMoving())
+        shotTimer += Time.deltaTime;
+
+        if (shotTimer < minShotTime)
+            return;
+
+        if (shotTimer < maxShotTime && BallsMoving())
             return;
 
         EndShot();
@@ -120,6 +132,7 @@ public class GameManger : MonoBehaviour
         potted.Clear();
         cueBall.Shoot(dir, power);
         shotRunning = true;
+        shotTimer = 0f;
     }
 
     public void ReportFirstHit(Ball ball)

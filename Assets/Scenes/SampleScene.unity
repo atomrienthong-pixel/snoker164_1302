@@ -178,6 +178,8 @@ MonoBehaviour:
   redGapX: 1.55
   redGapZ: 1.35
   foulPoint: 4
+  minShotTime: 0.4
+  maxShotTime: 25
   playerScore:
   - 0
   - 0
@@ -1970,7 +1972,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Hold left mouse to charge, release to shoot'
+  m_Text: 'A/D or mouse = aim   |   hold left mouse = power   |   release = shoot'
 
 --- !u!1 &700000050
 GameObject:
@@ -2943,11 +2945,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cue: {fileID: 1278024729}
-  maxPower: 25
-  chargeSpeed: 20
+  cam: {fileID: 330585546}
+  maxPower: 45
+  minPower: 5
+  chargeSpeed: 35
+  aimSpeed: 90
+  mouseAimSpeed: 0.2
   cueGap: 1.2
   cueHalfLength: 4
-  ballY: 0.75
+  camDistance: 11
+  camHeight: 5
+  camLookAhead: 9
+  camFollowSpeed: 8
 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

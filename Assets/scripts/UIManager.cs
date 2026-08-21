@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+
+        ShowPower(0f);
     }
 
     private void Start()

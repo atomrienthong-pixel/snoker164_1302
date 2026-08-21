@@ -7,10 +7,22 @@ public class CueController : MonoBehaviour
     private Transform cue;
 
     [SerializeField]
-    private float maxPower = 25f;
+    private Transform cam;
 
     [SerializeField]
-    private float chargeSpeed = 20f;
+    private float maxPower = 45f;
+
+    [SerializeField]
+    private float minPower = 5f;
+
+    [SerializeField]
+    private float chargeSpeed = 35f;
+
+    [SerializeField]
+    private float aimSpeed = 90f;
+
+    [SerializeField]
+    private float mouseAimSpeed = 0.2f;
 
     [SerializeField]
     private float cueGap = 1.2f;
@@ -19,75 +31,92 @@ public class CueController : MonoBehaviour
     private float cueHalfLength = 4f;
 
     [SerializeField]
-    private float ballY = 0.75f;
+    private float camDistance = 11f;
 
-    private Camera cam;
-    private Plane tablePlane;
-    private Vector3 aimDir = Vector3.forward;
+    [SerializeField]
+    private float camHeight = 5f;
+
+    [SerializeField]
+    private float camLookAhead = 9f;
+
+    [SerializeField]
+    private float camFollowSpeed = 8f;
+
+    private float aimAngle;
+    private float chargeTime;
     private float power;
     private bool charging;
 
-    void Start()
-    {
-        cam = Camera.main;
-        tablePlane = new Plane(Vector3.up, new Vector3(0f, ballY, 0f));
-    }
+    private Vector3 AimDir { get { return Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward; } }
 
     void Update()
     {
-        if (GameManger.instance == null || Mouse.current == null)
+        if (GameManger.instance == null)
             return;
-
-        if (!GameManger.instance.CanShoot)
-        {
-            HideCue();
-            return;
-        }
 
         Ball cueBall = GameManger.instance.CueBall;
 
         if (cueBall == null)
             return;
 
-        Aim(cueBall.transform.position);
-        Charge(cueBall.transform.position);
+        Vector3 ballPos = cueBall.transform.position;
+
+        if (GameManger.instance.CanShoot)
+        {
+            Aim();
+            Charge();
+            ShowCue(ballPos);
+        }
+        else
+        {
+            HideCue();
+        }
+
+        MoveCamera(ballPos);
     }
 
-    private void Aim(Vector3 ballPos)
+    private void Aim()
     {
-        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        float dist;
-
-        if (!tablePlane.Raycast(ray, out dist))
+        if (charging)
             return;
 
-        Vector3 dir = ray.GetPoint(dist) - ballPos;
-        dir.y = 0f;
+        float move = 0f;
 
-        if (dir.sqrMagnitude < 0.01f)
-            return;
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
+                move -= 1f;
 
-        aimDir = dir.normalized;
+            if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
+                move += 1f;
+        }
+
+        aimAngle += move * aimSpeed * Time.deltaTime;
+
+        if (Mouse.current != null)
+            aimAngle += Mouse.current.delta.ReadValue().x * mouseAimSpeed;
     }
 
-    private void Charge(Vector3 ballPos)
+    private void Charge()
     {
+        if (Mouse.current == null)
+            return;
+
         if (Mouse.current.leftButton.isPressed)
         {
             charging = true;
-            power = Mathf.Min(power + chargeSpeed * Time.deltaTime, maxPower);
+            chargeTime += Time.deltaTime;
+            power = Mathf.PingPong(chargeTime * chargeSpeed, maxPower);
         }
         else if (charging)
         {
             charging = false;
-            GameManger.instance.Shoot(aimDir, power);
+            GameManger.instance.Shoot(AimDir, Mathf.Max(power, minPower));
+            chargeTime = 0f;
             power = 0f;
         }
 
-        ShowCue(ballPos);
-
-        if (UIManager.instance != null)
-            UIManager.instance.ShowPower(power / maxPower);
+        ShowPower();
     }
 
     private void ShowCue(Vector3 ballPos)
@@ -98,9 +127,10 @@ public class CueController : MonoBehaviour
         if (!cue.gameObject.activeSelf)
             cue.gameObject.SetActive(true);
 
+        Vector3 dir = AimDir;
         float back = cueGap + power * 0.08f + cueHalfLength;
-        cue.position = ballPos - aimDir * back;
-        cue.rotation = Quaternion.LookRotation(aimDir) * Quaternion.Euler(90f, 0f, 0f);
+        cue.position = ballPos - dir * back;
+        cue.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90f, 0f, 0f);
     }
 
     private void HideCue()
@@ -108,10 +138,34 @@ public class CueController : MonoBehaviour
         if (cue != null && cue.gameObject.activeSelf)
             cue.gameObject.SetActive(false);
 
-        power = 0f;
         charging = false;
+        chargeTime = 0f;
+        power = 0f;
+        ShowPower();
+    }
 
+    private void ShowPower()
+    {
         if (UIManager.instance != null)
-            UIManager.instance.ShowPower(0f);
+            UIManager.instance.ShowPower(power / maxPower);
+    }
+
+    private void MoveCamera(Vector3 ballPos)
+    {
+        if (cam == null)
+            return;
+
+        Vector3 dir = AimDir;
+        Vector3 target = ballPos - dir * camDistance + Vector3.up * camHeight;
+        Vector3 lookAt = ballPos + dir * camLookAhead;
+
+        cam.position = Vector3.Lerp(cam.position, target, camFollowSpeed * Time.deltaTime);
+
+        Vector3 look = lookAt - cam.position;
+
+        if (look.sqrMagnitude < 0.01f)
+            return;
+
+        cam.rotation = Quaternion.Slerp(cam.rotation, Quaternion.LookRotation(look), camFollowSpeed * Time.deltaTime);
     }
 }

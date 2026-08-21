@@ -21,7 +21,7 @@ public class Ball : MonoBehaviour
     private BallColor color;
 
     [SerializeField]
-    private float stopSpeed = 0.15f;
+    private float stopSpeed = 0.25f;
 
     private MeshRenderer rd;
     private Rigidbody rb;
