@@ -65,7 +65,7 @@ public class MainMenuManager : MonoBehaviour
         if (AudioManager.instance != null)
             AudioManager.instance.PlayButton();
 
-        SceneManager.LoadScene(gameSceneName);
+        SceneLoader.LoadWithScreen(gameSceneName);
     }
 
     public void OpenHowTo()

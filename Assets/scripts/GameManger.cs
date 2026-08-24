@@ -62,7 +62,14 @@ public class GameManger : MonoBehaviour
 
     void Start()
     {
-        SetAllBalls();
+        SaveData save = SaveSystem.LoadOnNextStart ? SaveSystem.Load() : null;
+        SaveSystem.LoadOnNextStart = false;
+
+        if (save != null)
+            RestoreFrom(save);
+        else
+            SetAllBalls();
+
         ShowState();
     }
 
@@ -90,14 +97,83 @@ public class GameManger : MonoBehaviour
             return;
         }
 
-        cueBall = SpawnBall(BallColor.White, new Vector3(-2f, ballY, baulkZ - 3f));
-        SpawnBall(BallColor.Yellow, new Vector3(dRadius, ballY, baulkZ));
-        SpawnBall(BallColor.Green, new Vector3(-dRadius, ballY, baulkZ));
-        SpawnBall(BallColor.Brown, new Vector3(0f, ballY, baulkZ));
-        SpawnBall(BallColor.Blue, new Vector3(0f, ballY, 0f));
-        SpawnBall(BallColor.Pink, new Vector3(0f, ballY, 14.5f));
-        SpawnBall(BallColor.Black, new Vector3(0f, ballY, 23.7f));
+        cueBall = SpawnBall(BallColor.White, ColorSpot(BallColor.White));
+        SpawnBall(BallColor.Yellow, ColorSpot(BallColor.Yellow));
+        SpawnBall(BallColor.Green, ColorSpot(BallColor.Green));
+        SpawnBall(BallColor.Brown, ColorSpot(BallColor.Brown));
+        SpawnBall(BallColor.Blue, ColorSpot(BallColor.Blue));
+        SpawnBall(BallColor.Pink, ColorSpot(BallColor.Pink));
+        SpawnBall(BallColor.Black, ColorSpot(BallColor.Black));
         SpawnReds();
+    }
+
+    /// <summary>Where a named colour racks and where it goes back to when potted.</summary>
+    private Vector3 ColorSpot(BallColor col)
+    {
+        switch (col)
+        {
+            case BallColor.White: return new Vector3(-2f, ballY, baulkZ - 3f);
+            case BallColor.Yellow: return new Vector3(dRadius, ballY, baulkZ);
+            case BallColor.Green: return new Vector3(-dRadius, ballY, baulkZ);
+            case BallColor.Brown: return new Vector3(0f, ballY, baulkZ);
+            case BallColor.Blue: return new Vector3(0f, ballY, 0f);
+            case BallColor.Pink: return new Vector3(0f, ballY, 14.5f);
+            case BallColor.Black: return new Vector3(0f, ballY, 23.7f);
+            default: return Vector3.zero;
+        }
+    }
+
+    /// <summary>Writes both scores, the turn and every remaining ball to the save slot.</summary>
+    public void SaveGame()
+    {
+        SaveData data = new SaveData
+        {
+            score0 = playerScore[0],
+            score1 = playerScore[1],
+            turn = turn,
+            needRed = needRed,
+        };
+
+        for (int i = 0; i < balls.Count; i++)
+        {
+            Ball ball = balls[i];
+            if (ball.gameObject.activeSelf)
+                data.balls.Add(BallState.From(ball.ColorType, ball.transform.position));
+        }
+
+        SaveSystem.Save(data);
+    }
+
+    /// <summary>
+    /// Rebuilds the table from a save instead of racking a fresh frame. Reds
+    /// come back exactly where they sat; colours come back at that position too,
+    /// but their respot point is reset to the canonical spot rather than
+    /// wherever they happened to be sitting when the game was saved.
+    /// </summary>
+    private void RestoreFrom(SaveData save)
+    {
+        playerScore[0] = save.score0;
+        playerScore[1] = save.score1;
+        turn = save.turn;
+        needRed = save.needRed;
+
+        foreach (BallState state in save.balls)
+        {
+            Ball ball = SpawnBall(state.Colour, state.Position);
+
+            if (state.Colour == BallColor.White)
+            {
+                cueBall = ball;
+                ball.SetSpot(ColorSpot(BallColor.White));
+            }
+            else if (state.Colour != BallColor.Red)
+            {
+                ball.SetSpot(ColorSpot(state.Colour));
+            }
+        }
+
+        Debug.Log($"[GameManger] Restored save: P1 {playerScore[0]} - P2 {playerScore[1]}, " +
+                  $"{balls.Count} balls left");
     }
 
     private void SpawnReds()

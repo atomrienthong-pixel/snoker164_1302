@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
@@ -28,6 +29,18 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField]
     private bool pauseWhileOpen;
 
+    [SerializeField]
+    private Button saveButton;
+
+    [SerializeField]
+    private Button loadButton;
+
+    [SerializeField]
+    private Text loadButtonLabel;
+
+    [SerializeField]
+    private Text saveStatusText;
+
     private bool open;
     private float savedScale = 1f;
 
@@ -43,6 +56,12 @@ public class SettingsMenu : MonoBehaviour
 
         if (closeButton != null)
             closeButton.onClick.AddListener(Close);
+
+        if (saveButton != null)
+            saveButton.onClick.AddListener(SaveGame);
+
+        if (loadButton != null)
+            loadButton.onClick.AddListener(LoadSavedGame);
 
         float music = AudioManager.instance != null ? AudioManager.instance.MusicVolume : 0.7f;
         float sfx = AudioManager.instance != null ? AudioManager.instance.SfxVolume : 1f;
@@ -97,6 +116,49 @@ public class SettingsMenu : MonoBehaviour
             sfxValueText.text = Mathf.RoundToInt(value * 100f) + "%";
     }
 
+    public void SaveGame()
+    {
+        if (GameManger.instance == null)
+            return;
+
+        GameManger.instance.SaveGame();
+        RefreshLoadButton();
+        SetSaveStatus("Saved: " + SaveSystem.Summary());
+    }
+
+    /// <summary>
+    /// Reloads the frame from the save slot. The scene is loaded again rather
+    /// than patched in place, so the rack is rebuilt cleanly.
+    /// </summary>
+    public void LoadSavedGame()
+    {
+        if (!SaveSystem.HasSave)
+        {
+            SetSaveStatus("There is no saved game yet.");
+            return;
+        }
+
+        SaveSystem.LoadOnNextStart = true;
+        SceneLoader.LoadWithScreen(SceneManager.GetActiveScene().name);
+    }
+
+    private void RefreshLoadButton()
+    {
+        bool has = SaveSystem.HasSave;
+
+        if (loadButton != null)
+            loadButton.interactable = has;
+
+        if (loadButtonLabel != null)
+            loadButtonLabel.text = has ? "Load Saved Game" : "Load Saved Game  (none)";
+    }
+
+    private void SetSaveStatus(string message)
+    {
+        if (saveStatusText != null)
+            saveStatusText.text = message;
+    }
+
     public void Toggle()
     {
         Show(!open);
@@ -134,5 +196,13 @@ public class SettingsMenu : MonoBehaviour
 
         if (value && AudioManager.instance != null)
             AudioManager.instance.PlayButton();
+
+        if (value)
+        {
+            RefreshLoadButton();
+            SetSaveStatus(SaveSystem.HasSave
+                ? "Save: " + SaveSystem.Summary()
+                : "No saved game yet.");
+        }
     }
 }

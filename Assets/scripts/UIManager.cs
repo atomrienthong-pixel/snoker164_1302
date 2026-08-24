@@ -81,6 +81,6 @@ public class UIManager : MonoBehaviour
         if (AudioManager.instance != null)
             AudioManager.instance.PlayButton();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneLoader.LoadWithScreen(SceneManager.GetActiveScene().name);
     }
 }
