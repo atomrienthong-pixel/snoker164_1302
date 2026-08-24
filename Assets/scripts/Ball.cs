@@ -112,7 +112,13 @@ public class Ball : MonoBehaviour
 
         Ball other = collision.gameObject.GetComponent<Ball>();
 
-        if (other != null && GameManger.instance != null)
+        if (other == null)
+            return;
+
+        if (GameManger.instance != null)
             GameManger.instance.ReportFirstHit(other);
+
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayBallHit();
     }
 }

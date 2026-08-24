@@ -62,6 +62,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void PlayGame()
     {
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayButton();
+
         SceneManager.LoadScene(gameSceneName);
     }
 
@@ -77,6 +80,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void ShowHowTo(bool show)
     {
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayButton();
+
         if (howToPanel != null)
             howToPanel.SetActive(show);
     }
