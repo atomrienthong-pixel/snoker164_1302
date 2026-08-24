@@ -2312,7 +2312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 970000003}
   sfxSource: {fileID: 970000004}
-  musicClip: {fileID: 0}
+  musicClip: {fileID: 8300000, guid: 62524a6c3ae394445aea23997135a20b, type: 3}
   buttonClip: {fileID: 0}
   cueHitClip: {fileID: 0}
   ballHitClip: {fileID: 0}

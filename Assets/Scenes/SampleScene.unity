@@ -3925,10 +3925,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 971000003}
   sfxSource: {fileID: 971000004}
-  musicClip: {fileID: 0}
+  musicClip: {fileID: 8300000, guid: 62524a6c3ae394445aea23997135a20b, type: 3}
   buttonClip: {fileID: 0}
-  cueHitClip: {fileID: 0}
-  ballHitClip: {fileID: 0}
+  cueHitClip: {fileID: 8300000, guid: 0e93ddba5f1d0174a907fa68632dab68, type: 3}
+  ballHitClip: {fileID: 8300000, guid: dfcbd648493f90041b53ced9aed0b37f, type: 3}
   potClip: {fileID: 0}
   foulClip: {fileID: 0}
   winClip: {fileID: 0}
