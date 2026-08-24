@@ -194,9 +194,6 @@ public class SettingsMenu : MonoBehaviour
             }
         }
 
-        if (value && AudioManager.instance != null)
-            AudioManager.instance.PlayButton();
-
         if (value)
         {
             RefreshLoadButton();

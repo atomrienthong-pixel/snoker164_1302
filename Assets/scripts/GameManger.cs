@@ -228,8 +228,6 @@ public class GameManger : MonoBehaviour
         potted.Add(ball);
         ball.Stop();
 
-        if (AudioManager.instance != null)
-            AudioManager.instance.PlayPot();
         ball.gameObject.SetActive(false);
     }
 
@@ -310,9 +308,6 @@ public class GameManger : MonoBehaviour
         playerScore[1 - turn] += foulPoint;
         needRed = RedLeft() > 0;
         SwitchTurn();
-
-        if (AudioManager.instance != null)
-            AudioManager.instance.PlayFoul();
 
         if (UIManager.instance != null)
             UIManager.instance.ShowMessage("Foul +" + foulPoint);
@@ -424,9 +419,6 @@ public class GameManger : MonoBehaviour
     {
         gameOver = true;
         ShowState();
-
-        if (AudioManager.instance != null)
-            AudioManager.instance.PlayWin();
 
         if (UIManager.instance == null)
             return;

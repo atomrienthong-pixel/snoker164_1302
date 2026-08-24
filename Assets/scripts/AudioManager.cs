@@ -13,8 +13,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioClip musicClip;
 
-    [SerializeField]
-    private AudioClip buttonClip;
 
     [SerializeField]
     private AudioClip cueHitClip;
@@ -22,14 +20,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioClip ballHitClip;
 
-    [SerializeField]
-    private AudioClip potClip;
 
-    [SerializeField]
-    private AudioClip foulClip;
 
-    [SerializeField]
-    private AudioClip winClip;
 
     private float musicVolume = 0.7f;
     private float sfxVolume = 1f;
@@ -88,10 +80,6 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(clip, sfxVolume);
     }
 
-    public void PlayButton()
-    {
-        PlaySfx(buttonClip);
-    }
 
     public void PlayCueHit()
     {
@@ -101,20 +89,5 @@ public class AudioManager : MonoBehaviour
     public void PlayBallHit()
     {
         PlaySfx(ballHitClip);
-    }
-
-    public void PlayPot()
-    {
-        PlaySfx(potClip);
-    }
-
-    public void PlayFoul()
-    {
-        PlaySfx(foulClip);
-    }
-
-    public void PlayWin()
-    {
-        PlaySfx(winClip);
     }
 }
