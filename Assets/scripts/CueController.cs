@@ -13,13 +13,13 @@ public class CueController : MonoBehaviour
     private Transform aimLine;
 
     [SerializeField]
-    private float maxPower = 45f;
+    private float maxPower = 60f;
 
     [SerializeField]
-    private float minPower = 5f;
+    private float minPower = 8f;
 
     [SerializeField]
-    private float chargeSpeed = 35f;
+    private float chargeSpeed = 45f;
 
     [SerializeField]
     private float aimSpeed = 90f;
@@ -31,16 +31,16 @@ public class CueController : MonoBehaviour
     private float cueGap = 1.2f;
 
     [SerializeField]
-    private float cueHalfLength = 4f;
+    private float cueHalfLength = 6f;
 
     [SerializeField]
-    private float camDistance = 11f;
+    private float camDistance = 7f;
 
     [SerializeField]
-    private float camHeight = 5f;
+    private float camHeight = 3f;
 
     [SerializeField]
-    private float camLookAhead = 9f;
+    private float camLookAhead = 12f;
 
     [SerializeField]
     private float camFollowSpeed = 8f;
@@ -52,10 +52,10 @@ public class CueController : MonoBehaviour
     private float topPitch = 90f;
 
     [SerializeField]
-    private float ballRadius = 0.75f;
+    private float ballRadius = 0.425f;
 
     [SerializeField]
-    private float lineWidth = 0.2f;
+    private float lineWidth = 0.1f;
 
     [SerializeField]
     private float maxLineLength = 40f;
@@ -162,7 +162,7 @@ public class CueController : MonoBehaviour
             cue.gameObject.SetActive(true);
 
         Vector3 dir = AimDir;
-        float back = cueGap + power * 0.08f + cueHalfLength;
+        float back = cueGap + power * 0.03f + cueHalfLength;
         cue.position = ballPos - dir * back;
         cue.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90f, 0f, 0f);
     }

@@ -9,7 +9,7 @@ public class GameManger : MonoBehaviour
     private GameObject ballPrefab;
 
     [SerializeField]
-    private float ballY = 0.75f;
+    private float ballY = 0.425f;
 
     [SerializeField]
     private float baulkZ = -17f;
@@ -18,13 +18,13 @@ public class GameManger : MonoBehaviour
     private float dRadius = 4.4f;
 
     [SerializeField]
-    private float redApexZ = 16.3f;
+    private float redApexZ = 15.4f;
 
     [SerializeField]
-    private float redGapX = 1.55f;
+    private float redGapX = 0.88f;
 
     [SerializeField]
-    private float redGapZ = 1.35f;
+    private float redGapZ = 0.77f;
 
     [SerializeField]
     private int foulPoint = 4;
